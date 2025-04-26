@@ -24,3 +24,15 @@ def model_response(model_name,prompt,request):
         else:
             print(f"生成被中止，原因：{finish_reason}")
     return completion.choices[0].message.content
+
+def Court_SIM():
+    process = 0
+    #0 庭前准备：核对身份、宣布纪律、合议庭组成、询问回避 
+    #1 法庭调查：原告陈述、被告答辩、举证质证
+    #2 法庭辩论：双方发言、争议焦点
+    #3 最后陈述：原被告最后意见）
+    #4 调解阶段：询问调解意愿
+    #5 宣判：当庭或择期
+    
+    #庭前准备
+    if process == 0:    
