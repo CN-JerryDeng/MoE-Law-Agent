@@ -1,4 +1,3 @@
-import time
 from openai import OpenAI
 
 #OpenAI 基础配置
@@ -12,8 +11,8 @@ def model_response(model_name,prompt,request):
     completion = client.chat.completions.create(
         model = model_name,
         messages = [
-            {"role": "system", "content":prompt},
-            {"role": "user", "content":request},
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": str(request)},
         ],
     )
     #获取结束原因
@@ -26,15 +25,25 @@ def model_response(model_name,prompt,request):
     return completion.choices[0].message.content
 
 def easy_write(file_name='whole_log.txt',edit_method='a',content=''):
-    with open(file_name,edit_method) as file:
+    with open(file_name,edit_method,encoding='utf-8') as file:
         file.write(content)
 
 def respond_and_log(model_name,prompt,request,file_name='whole_log.txt',edit_method='a'):
     content = model_response(model_name,prompt,request)
     easy_write(file_name,edit_method,content)
 
+def role_respond(role):
+    with open(f'.\\role\\{role}\\prompt.txt', 'r', encoding='utf-8') as file:
+            prompt = file.read()
+    if role == 'Court Clerk':
+        model_name = 'doubao-pro-32k-241215'
+        request = open('whole_log.txt','r',encoding='utf-8').read()
+        file_name = 'Court_log.txt'
+
+    respond_and_log(model_name,prompt,request,file_name)
+
 def Court_SIM():
-    easy_write('whole_log.txt',edit_method='a','当前流程ID 0')
+    easy_write('whole_log.txt','a','当前流程ID:0')
     process = 0
     #0 庭前准备：核对身份、宣布纪律、合议庭组成、询问回避 
     #1 法庭调查：原告陈述、被告答辩、举证质证
@@ -44,4 +53,6 @@ def Court_SIM():
     #5 宣判：当庭或择期
     #6 总结
     #庭前准备
-    #if process == 0:    
+    if process == 0:    
+        role_respond('Court Clerk')
+Court_SIM()
